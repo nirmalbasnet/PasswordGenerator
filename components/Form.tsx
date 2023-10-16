@@ -67,14 +67,27 @@ const Form = () => {
     return `${password}${selectedSpecialChar}`;
   };
 
-  const includeLowercaseInPassword = (
-    password: string,
-    passwordLength: number,
-  ) => {
+  const generatePasswordString = (password: string, passwordLength: number) => {
     const currentLength = password.length;
+
+    let possiblePasswordChars = lowercaseCharacters;
+    if (includeUppercase) {
+      possiblePasswordChars += uppercaseCharacters;
+    }
+
+    if (includeNumber) {
+      possiblePasswordChars += numberCharacters;
+    }
+
+    if (includeSpecialChars) {
+      possiblePasswordChars += specialCharacters;
+    }
+
+    const possiblePasswordCharsLength = possiblePasswordChars.length;
+
     for (let i = currentLength; i < passwordLength; i++) {
-      const selectedChar = lowercaseCharacters.charAt(
-        Math.floor(Math.random() * 26),
+      const selectedChar = possiblePasswordChars.charAt(
+        Math.floor(Math.random() * possiblePasswordCharsLength),
       );
       password += selectedChar;
     }
@@ -120,7 +133,7 @@ const Form = () => {
       generatedPassword = includeSpecialCharsInPassword(generatedPassword);
     }
 
-    generatedPassword = includeLowercaseInPassword(
+    generatedPassword = generatePasswordString(
       generatedPassword,
       passwordLengthNumber,
     );
